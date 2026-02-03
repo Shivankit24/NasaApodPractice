@@ -1,0 +1,45 @@
+# Xcode
+
+## User settings
+xcuserdata/
+
+## Build results
+build/
+DerivedData/
+
+## Usage Data
+.lsbuild01.vst
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+## Swift Package Manager
+.build/
+.swiftpm/
+
+## CocoaPods (Uncomment if you use Pods and don't want to check them in)
+# Pods/
+# *.xcworkspace
+
+## Carthage (Uncomment if you use Carthage)
+# Carthage/Build/
+
+## Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+## Bundle (Ruby)
+.bundle/
+vendor/bundle/
+
+## macOS
+.DS_Store
+*.swp
+*.lock
