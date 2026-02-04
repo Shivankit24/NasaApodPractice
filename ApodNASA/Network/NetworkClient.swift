@@ -8,34 +8,31 @@
 import Foundation
 
 protocol NetworkClientProtocol {
-    func execute<T: Decodable>(_ request: NetworkRequest) async throws -> T
+    func performRequest<T: Decodable>(for endpoint: Endpoint) async throws -> T
 }
 
 final class NetworkClient: NetworkClientProtocol {
     private let session: URLSession
     private let decoder: JSONDecoder
 
-    init(session: URLSession = URLSession(configuration: .default), decoder: JSONDecoder = JSONDecoder()) {
+    init(
+        session: URLSession = URLSession(configuration: .default),
+        decoder: JSONDecoder = JSONDecoder()
+    ) {
         self.session = session
         self.decoder = decoder
     }
 
-    func execute<T: Decodable>(_ request: NetworkRequest) async throws -> T {
-        var urlRequest = URLRequest(url: request.finalURL)
-        urlRequest.httpMethod = request.method.rawValue
-        urlRequest.allHTTPHeaderFields = request.headers
-
-        let data: Data
-        let response: URLResponse
+    func performRequest<T: Decodable>(for endpoint: Endpoint) async throws -> T {
+        let request = try endpoint.makeUrlRequest()
+        let (data, response): (Data, URLResponse)
 
         do {
-            (data, response) = try await session.data(for: urlRequest)
+            (data, response) = try await session.data(for: request)
+        } catch let error as URLError where error.code == .notConnectedToInternet {
+            throw NetworkError.noInternet
         } catch {
-            if (error as NSError).code == NSURLErrorNotConnectedToInternet {
-                throw NetworkError.noInternet
-            } else {
-                throw NetworkError.unknown(error)
-            }
+            throw NetworkError.unknown(error)
         }
 
         guard let httpResponse = response as? HTTPURLResponse else {

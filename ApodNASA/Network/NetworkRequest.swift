@@ -9,7 +9,7 @@ import Foundation
 
 enum HTTPMethod: String {
     case get = "GET"
-    // Add more methods here, if and when needed
+    // Add more, if and when needed
 }
 
 struct NetworkRequest {
@@ -26,5 +26,17 @@ struct NetworkRequest {
 
         components.queryItems = queryItems
         return components.url ?? url
+    }
+
+    init(
+        url: URL,
+        method: HTTPMethod = .get,
+        queryItems: [URLQueryItem]? = nil,
+        headers: [String : String]? = nil
+    ) {
+        self.url = url
+        self.method = method
+        self.queryItems = queryItems
+        self.headers = headers
     }
 }
