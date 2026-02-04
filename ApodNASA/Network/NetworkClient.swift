@@ -8,7 +8,7 @@
 import Foundation
 
 protocol NetworkClientProtocol {
-    func performRequest<T: Decodable>(for endpoint: Endpoint) async throws -> T
+    func performRequest<T: Decodable>(for resource: Resource<T>) async throws -> T
 }
 
 final class NetworkClient: NetworkClientProtocol {
@@ -23,8 +23,8 @@ final class NetworkClient: NetworkClientProtocol {
         self.decoder = decoder
     }
 
-    func performRequest<T: Decodable>(for endpoint: Endpoint) async throws -> T {
-        let request = try endpoint.makeUrlRequest()
+    func performRequest<T: Decodable>(for resource: Resource<T>) async throws -> T {
+        let request = try resource.toURLRequest()
         let (data, response): (Data, URLResponse)
 
         do {
